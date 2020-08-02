@@ -23,5 +23,5 @@ For more information about the general idea and pseudocode, see the following Wi
 * Floyd–Steinberg dithering (https://en.wikipedia.org/wiki/Floyd%E2%80%93Steinberg_dithering)
 
 I got the idea for this project from the following Youtube videos:
-* Coding Challenge #90: Floyd-Steinberg Dithering - The Coding Train (https://www.youtube.com/watch?v=0L2n8Tg2FwI)
 * Error Diffusion Dithering - Computerphile (https://www.youtube.com/watch?v=ico4fJfohMQ)
+* Coding Challenge #90: Floyd-Steinberg Dithering - The Coding Train (https://www.youtube.com/watch?v=0L2n8Tg2FwI)
