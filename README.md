@@ -9,6 +9,8 @@ By clicking the *Save Image*-button the generated dithered image gets saved to a
 Floyd–Steinberg dithering is an image dithering algorithm first published in 1976 by Robert W. Floyd and Louis Steinberg.
 The algorithm achieves dithering using error diffusion, meaning it pushes (adds) the residual quantization error of a pixel onto its neighboring pixels.
 
+The folder *images* contains 4 example images and their dithered result.
+
 ## Screenshot
 ![screenshot](/screenshot.png)
 
