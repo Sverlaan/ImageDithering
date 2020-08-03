@@ -7,7 +7,7 @@ namespace ImageDithering
 {
     public class DitheringForm : Form
     {
-        readonly PictureBox original_pb, dithered_pb;
+        readonly PictureBox originalPB, resultPB;
         readonly Button load, save;
 
         public DitheringForm()
@@ -17,7 +17,7 @@ namespace ImageDithering
             this.Size = new Size(816, 468);
 
             // Initialize controls
-            original_pb = new PictureBox
+            originalPB = new PictureBox
             {
                 Size = new Size(400, 400),
                 Location = new Point(0, 0),
@@ -25,24 +25,24 @@ namespace ImageDithering
                 SizeMode = PictureBoxSizeMode.Zoom
             };
 
-            dithered_pb = new PictureBox
+            resultPB = new PictureBox
             {
-                Size = original_pb.Size,
-                Location = new Point(original_pb.Right, original_pb.Top),
+                Size = originalPB.Size,
+                Location = new Point(originalPB.Right, originalPB.Top),
                 BackColor = Color.Black,
                 SizeMode = PictureBoxSizeMode.Zoom
             };
 
             load = new Button
             {
-                Location = new Point((original_pb.Width - 100) / 2, original_pb.Bottom),
+                Location = new Point((originalPB.Width - 100) / 2, originalPB.Bottom),
                 Size = new Size(100, 30),
                 Text = "Load Image"
             };
 
             save = new Button
             {
-                Location = new Point(load.Left + original_pb.Width, dithered_pb.Bottom),
+                Location = new Point(load.Left + originalPB.Width, resultPB.Bottom),
                 Size = new Size(100, 30),
                 Text = "Save Image"
             };
@@ -52,10 +52,7 @@ namespace ImageDithering
             save.Click += Save_Image;
 
             // Add controls
-            Controls.Add(load);
-            Controls.Add(save);
-            Controls.Add(original_pb);
-            Controls.Add(dithered_pb);
+            Controls.AddRange(new Control[] { load, save, originalPB, resultPB });
         }
 
         private Bitmap Dithering(Bitmap original)
@@ -94,7 +91,7 @@ namespace ImageDithering
 
         private int Quantize(int value)
         {
-            int factor = 1;     // Resultion / number of bounds - 1
+            int factor = 1;     // Resultion
 
             // Quantize the colorvalue to 0 (black) or 255 (white), depending on which bound is closer
             int quantized_value = (int)Math.Round((decimal)factor * value / 255) * (255 / factor);
@@ -107,7 +104,7 @@ namespace ImageDithering
             int height = original.Height;
             int[,] GreyArray = new int[width, height];
 
-            // Set values for DitheringArray with grey-filtered value for each pixel from original image
+            // Get grey-values for each pixel to create array that corresponds to image
             int r, g, b, grey;
             for (int y = 0; y < height; y++)
                 for (int x = 0; x < width; x++)
@@ -133,22 +130,23 @@ namespace ImageDithering
                 Filter = "Image Files(*.jpg; *.jpeg; *.png; *.gif; *.bmp)|*.jpg; *.jpeg; *.png; *.gif; *.bmp"
             };
 
+            // Load image file for dithering from chosen location
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 Bitmap original = new Bitmap(dialog.FileName);
 
-                original_pb.Image = original;
-                original_pb.Refresh();
+                originalPB.Image = original;
+                originalPB.Refresh();
 
-                dithered_pb.Image = new Bitmap(Dithering(original));
-                dithered_pb.Refresh();
+                resultPB.Image = new Bitmap(Dithering(original));
+                resultPB.Refresh();
             }
             dialog.Dispose();
         }
 
         private void Save_Image(object sender, EventArgs ea)
         {
-            if (dithered_pb.Image == null)
+            if (resultPB.Image == null)
                 return;
 
             SaveFileDialog dialoog = new SaveFileDialog
@@ -160,7 +158,7 @@ namespace ImageDithering
             // Dithered image gets saved to a chosen location
             if (dialoog.ShowDialog() == DialogResult.OK)
             {
-                Bitmap bm = new Bitmap(dithered_pb.Image);
+                Bitmap bm = new Bitmap(resultPB.Image);
 
                 bm.Save(dialoog.FileName, ImageFormat.Png);
                 bm.Dispose();
